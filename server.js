@@ -15,12 +15,8 @@ app.use(
 
 app.use(express.json());
 
-// const indexPath = __dirname + "/index.html";
-
-const name = "Alba";
-
 app.get("/", (req, res) => {
-  res.send(`Привет, чудик по имени ${name}`);
+  res.send(`Привет, безымянный чудик`);
   console.log("get");
 });
 
@@ -29,7 +25,7 @@ app.post("/", (req, res) => {
 
   const fullData = req.body;
 
-  console.log(fullData)
+  console.log(fullData);
 
   userData = {
     username: data.getUsername(fullData),
@@ -40,14 +36,14 @@ app.post("/", (req, res) => {
     contextLabel: data.getContextLabel(fullData),
   };
 
-  const {username, person, userID, courseTitle, roles, contextLabel} = userData
+  const { username, person, userID, courseTitle, roles, contextLabel } =
+    userData;
 
   const userString = `Здарова, ${roles} ${person}, твой никнейм: ${username}
   , твой индекс в системе: ${userID}, сейчас ты находишься в ${courseTitle} 
   название модуля ${contextLabel}-tool`;
 
   res.send(userString);
-  
 });
 
 const PORT = 9999;
