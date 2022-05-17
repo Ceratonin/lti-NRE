@@ -1,28 +1,55 @@
+const data = require("./getData");
+
 const express = require("express");
+const bodyParser = require("body-parser");
 
 const app = express();
-
 const server = require("http").Server(app);
 
-const indexPath = __dirname + "/index.html";
+app.use(bodyParser.json());
+app.use(
+  bodyParser.urlencoded({
+    extended: true,
+  })
+);
 
-const name = "Alba"
+app.use(express.json());
+
+// const indexPath = __dirname + "/index.html";
+
+const name = "Alba";
 
 app.get("/", (req, res) => {
   res.send(`Привет, чудик по имени ${name}`);
-  console.log("get")
+  console.log("get");
 });
 
 app.post("/", (req, res) => {
-  res.send(`Привет, чудик по имени ${name}`);
-  console.log("post")
-  console.log(req.form)
-})
+  console.log("post");
 
-// app.get("/lti", (req, res) => {
-//   res.sendFile(indexPath);
-// })
+  const fullData = req.body;
 
-const PORT = 9999
+  console.log(fullData)
+
+  userData = {
+    username: data.getUsername(fullData),
+    person: data.getPerson(fullData),
+    userID: data.getUserId(fullData),
+    courseTitle: data.getCourseTitle(fullData),
+    roles: data.getRoles(fullData),
+    contextLabel: data.getContextLabel(fullData),
+  };
+
+  const {username, person, userID, courseTitle, roles, contextLabel} = userData
+
+  const userString = `Здарова, ${roles} ${person}, твой никнейм: ${username}
+  , твой индекс в системе: ${userID}, сейчас ты находишься в ${courseTitle} 
+  название модуля ${contextLabel}-tool`;
+
+  res.send(userString);
+  
+});
+
+const PORT = 9999;
 
 server.listen(PORT, console.log(`Работают русские на порту: ${PORT}`));
